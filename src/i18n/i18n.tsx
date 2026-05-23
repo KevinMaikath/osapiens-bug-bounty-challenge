@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import { cloneDeep } from "lodash";
-import { initReactI18next } from "react-i18next";
+import { initReactI18next, setDefaults } from "react-i18next";
 import de from "./locales/de.json";
 import en from "./locales/en.json";
 
@@ -49,5 +49,9 @@ i18n
       escapeValue: false // not needed for react as it escapes by default
     }
   });
+
+setDefaults({
+  transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p', 'b']
+});
 
 export default i18n;
