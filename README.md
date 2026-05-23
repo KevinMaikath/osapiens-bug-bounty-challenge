@@ -31,3 +31,45 @@ Additionally, I added the tag `<b>` to react-i18next's `transKeepBasicHtmlNodesF
 quick-win solution would have been to use the `components` prop of the `<Trans>` component, but I think this other
 approach is better for the long term to avoid having to specify that same `component` prop every time `<b>` is used in a
 translation.
+
+The config should go under `react.transKeepBasicHtmlNodesFor` in `i18n.init()`, but react-i18next v11 reads its own
+defaults separately and it was causing a new bug after fixing bug 3 ("Uncaught TypeError: Component is not a function").
+I could've reverted to declaring the `components` prop in `<Trans>` but I tried setting this in `setDefaults()` from
+`react-i18next` instead of `react.transKeepBasicHtmlNodesFor` seems to be the fix for that, maintaining the long-term
+solution as I explained above.
+
+## Bug 3 — User avatar not displaying in app bar
+
+Found in `src/api/services/User/store.ts` and `src/components/AvatarMenu/index.tsx`
+
+**Fix**:
+
+The primary bug is a typo: `this.urser = result` in `getOwnUser()`. This was causing `user` to stay as `null` and
+`user && user.eMail` in `AppHeader` was never met.
+
+The second bug is that `AvatarMenu` was a plain function component, but it's rendered as a child of MUI's `Grow`
+transition, which passes a ref to its child to drive an animation. Without `React.forwardRef`, that ref is null,
+causing a crash. This wasn't crashing before the first fix becaus the `AvatarMenu` wasn't even being mounted.
+Reference: https://mui.com/material-ui/guides/composition/#caveat-with-refs
+
+As a minor good-practice detail, `StoreProvider` was instantiating `new Store()` directly in JSX
+(`value={new Store()}`), which creates a fresh store on every render of the provider. Moved to
+`useState(() => new Store())` to keep the reference stable. See "Additional changes" below for details.
+
+# Additional changes
+
+Non-bug improvements made along the way (like performance, good practices or latent issues).
+
+## Stable `Store` instance in `StoreProvider`
+
+Found in `src/api/services/User/index.tsx`
+
+`StoreProvider` was passing `new Store()` directly in JSX as the context value, so a fresh instance was created on every
+render. It only "worked" because the provider sits near the root and rarely re-renders.
+
+**Fix**: switched to `useState(() => new Store())` to construct the store once per mount. The lazy form matters:
+passing `new Store()` directly would still call the constructor on every render — React just discards the result after
+the first.
+
+Reference: [React docs —
+`useState`, "Avoiding recreating the initial state"](https://react.dev/reference/react/useState#avoiding-recreating-the-initial-state).
