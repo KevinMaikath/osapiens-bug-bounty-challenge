@@ -108,3 +108,8 @@ the first.
 
 Reference: [React docs —
 `useState`, "Avoiding recreating the initial state"](https://react.dev/reference/react/useState#avoiding-recreating-the-initial-state).
+
+# Tools used
+
+As for any everyday dev task, I used PyCharm as my primary IDE and Claude Code as my agentic tool of choice, helping me
+mainly as a research tool to gather information about the libraries, to plan their bug fixes and as a code reviewer.
