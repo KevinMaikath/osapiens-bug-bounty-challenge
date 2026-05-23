@@ -70,6 +70,19 @@ the cleanup before re-running the effect, so at most one interval is ever active
 Reference: [React docs — Synchronizing with
 Effects, Cleanup](https://react.dev/learn/synchronizing-with-effects#step-3-add-cleanup-if-needed)
 
+# New features
+
+## Language switch in the app bar
+
+Found in `src/components/AppHeader/index.tsx`, `src/components/LanguageSelect/index.tsx` and
+`src/i18n/locales/de.json`.
+
+Created a new `LanguageSelector` component and added it to the app header. The previously empty `de.json` was populated
+with German translations of every key in `en.json`.
+
+The component reads from `defaultLanguages` (already exported by `src/i18n/i18n.tsx`), so that registering a
+third locale only requires to add it to `defaultTranslationModules`.
+
 # Additional changes
 
 Non-bug improvements made along the way (like performance, good practices or latent issues).

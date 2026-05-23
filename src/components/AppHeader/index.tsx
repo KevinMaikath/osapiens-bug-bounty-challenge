@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "../../api/services/User/store";
 import AvatarMenu from "../AvatarMenu";
+import LanguageSelect from "../LanguageSelect";
 
 interface AppBarProps extends MuiAppBarProps {
   theme?: Theme;
@@ -57,6 +58,9 @@ const AppHeader = React.forwardRef((props: AppHeaderProps, ref) => {
             <Typography variant="h6" component="div" color="primary">
               {countdownMinutes}:{countdownSeconds}
             </Typography>
+          </Box>
+          <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
+            <LanguageSelect />
           </Box>
           <Box sx={{ width: 20, height: 20, flex: 1 }} />
           <Box sx={{ flex: 2 }}>
