@@ -83,6 +83,10 @@ with German translations of every key in `en.json`.
 The component reads from `defaultLanguages` (already exported by `src/i18n/i18n.tsx`), so that registering a
 third locale only requires to add it to `defaultTranslationModules`.
 
+As an additional change, I made the selected language persist between sessisons with the local storage (managed in
+`src/i18n/i18n.tsx`). The same could've been done with a cookie or even let it persist just in the current session, but
+I think this is a common pattern worth to mention.
+
 # Additional changes
 
 Non-bug improvements made along the way (like performance, good practices or latent issues).

@@ -27,9 +27,28 @@ export const defaultTranslationModules = [
 ];
 export const defaultLanguages = defaultTranslationModules.map((m) => m.locale);
 
+const LANGUAGE_STORAGE_KEY = "i18nextLng";
+
+const getLanguageFromLocalStorage = (): string | null => {
+  try {
+    return window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+// Decide the initial language. If the user has already selected a language before, prioritize it.
+const pickInitialLanguage = (): string => {
+  const candidates = [getLanguageFromLocalStorage(), browserLanguage];
+  return (
+    candidates.find((c): c is string => !!c && defaultLanguages.includes(c)) ??
+    FALLBACK_LANGUAGE
+  );
+};
+
 const resources = cloneDeep(
   Object.fromEntries(
-    defaultTranslationModules.map((m) => [m.locale, { app: m.texts }])
+    defaultTranslationModules.map((m) => [m.locale, {app: m.texts}])
   )
 );
 
@@ -43,12 +62,21 @@ i18n
     resources,
     ns: ["common", "app"],
     defaultNS: "app",
-    lng: FALLBACK_LANGUAGE || browserLanguage,
+    lng: pickInitialLanguage(),
     fallbackLng: FALLBACK_LANGUAGE,
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default
     }
   });
+
+// Store the selected language in the local storage for persistence between sessions
+i18n.on("languageChanged", (lang) => {
+  try {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+  } catch {
+    // localStorage unavailable. Skip silently.
+  }
+});
 
 setDefaults({
   transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p', 'b']
