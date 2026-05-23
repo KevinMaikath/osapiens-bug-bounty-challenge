@@ -56,6 +56,20 @@ As a minor good-practice detail, `StoreProvider` was instantiating `new Store()`
 (`value={new Store()}`), which creates a fresh store on every render of the provider. Moved to
 `useState(() => new Store())` to keep the reference stable. See "Additional changes" below for details.
 
+## Bug 4 — Countdown accelerates on Fast Refresh (stacked intervals)
+
+Found in `src/components/AppHeader/index.tsx:45`
+
+**How to reproduce**: Hot reloading. Start the dev server, make any change in the code and save. React Fast Refresh
+re-runs the effect without unmounting the component, so a second interval stacks on the first, making the counter
+increment at 2x speed.
+
+**Fix**: Return a cleanup function from `useEffect` that calls `clearInterval` on the interval ID. Fast Refresh calls
+the cleanup before re-running the effect, so at most one interval is ever active.
+
+Reference: [React docs — Synchronizing with
+Effects, Cleanup](https://react.dev/learn/synchronizing-with-effects#step-3-add-cleanup-if-needed)
+
 # Additional changes
 
 Non-bug improvements made along the way (like performance, good practices or latent issues).

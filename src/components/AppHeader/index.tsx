@@ -43,9 +43,10 @@ const AppHeader = React.forwardRef((props: AppHeaderProps, ref) => {
   const countdownSeconds = (countdown % 60).toFixed(0).padStart(2, "0");
 
   useEffect(() => {
-    setInterval(() => {
+    const id = setInterval(() => {
       setCount((c) => c + 1);
     }, 1000);
+    return () => clearInterval(id);
   }, []);
 
   return (
