@@ -91,6 +91,10 @@ I think this is a common pattern worth to mention.
 
 Non-bug improvements made along the way (like performance, good practices or latent issues).
 
+> [!NOTE]
+> There are multiple TODOs, comments, console.logs and other things that I would usually clean, but I preferred to focus
+> on the things related to the bugs of this challenge.
+
 ## Stable `Store` instance in `StoreProvider`
 
 Found in `src/api/services/User/index.tsx`
