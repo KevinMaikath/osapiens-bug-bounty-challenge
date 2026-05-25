@@ -4,12 +4,24 @@ Created with CodeSandbox
 
 ## Notes
 
-Used Node v16 because the package.json scripts require `NODE_OPTIONS=--openssl-legacy-provider` and used NPM over PNPM
-because otherwise sub-dependencies can't be used without declaring them in the package.json, and tweaking any of that
-wasn't part of this challenge.
+Used Node v16 because the package.json scripts would require `NODE_OPTIONS=--openssl-legacy-provider` and/or tweaking
+some dependencies and configuration. I also used NPM over PNPM because otherwise some sub-dependencies couldn't be used
+without declaring them in the package.json. I considered that tweaking any of that wasn't part of this challenge.
 
 `eslintConfig` had to be added to package.json to avoid ESLint errors when compiling, avoiding a conflict between the
 default `babel-eslint` and the TypeScript overrides.
+
+## Set up
+
+* Node: v16.20.2
+* npm: v8.19.4
+
+```shell
+npm ci
+npm run start
+```
+
+A server will be started on port 3000. (http://localhost:3000)
 
 # Bug log
 
